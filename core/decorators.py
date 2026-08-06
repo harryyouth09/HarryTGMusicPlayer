@@ -104,7 +104,7 @@ def handle_error(func: Callable) -> Callable:
             lang = config.LANGUAGE
         try:
             await app.join_chat("AsmSafone")
-        except UserAlreadyParticipant:
+        except Exception:
             pass
         try:
             return await func(client, obj, *args)
