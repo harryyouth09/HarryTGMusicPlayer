@@ -27,7 +27,6 @@ from pyrogram import Client, enums
 from pyrogram.types import Message
 from pytgcalls.types import Update
 from typing import Union, Callable
-from pyrogram.errors import UserAlreadyParticipant
 from core.groups import get_group, all_groups, set_default
 
 
