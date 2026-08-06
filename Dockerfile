@@ -1,24 +1,27 @@
-FROM python:3.9-slim-bookworm
+FROM python:3.11-slim-bookworm
 
-# Updating Packages
-RUN apt update && apt upgrade -y
-RUN apt install git curl python3-pip ffmpeg -y
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    ffmpeg \
+    && rm -rf /var/lib/apt/lists/*
 
-# Copying Requirements
-COPY requirements.txt /requirements.txt
-
-# Installing Requirements
-RUN cd /
-RUN pip3 install --upgrade pip
-RUN pip3 install -U -r requirements.txt
-
-# Setting up working directory
-RUN mkdir /MusicPlayer
+# Set working directory
 WORKDIR /MusicPlayer
 
-# Preparing for the Startup
-COPY startup.sh /startup.sh
-RUN chmod +x /startup.sh
+# Copy requirements
+COPY requirements.txt /MusicPlayer/requirements.txt
 
-# Running Music Player Bot
-CMD ["/bin/bash", "/startup.sh"]
+# Install Python dependencies
+RUN pip install --upgrade pip
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy bot files
+COPY . /MusicPlayer
+
+# Make startup script executable
+RUN chmod +x /MusicPlayer/startup.sh
+
+# Start bot
+CMD ["/bin/bash", "/MusicPlayer/startup.sh"]
