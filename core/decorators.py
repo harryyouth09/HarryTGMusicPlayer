@@ -151,7 +151,7 @@ def handle_error(func: Callable) -> Callable:
                 group_link = error_msg.link if error_msg else ""
 
                 await pyro_client.send_message(
-                    config.SUDOERS[0],
+                    me.id,
                     f"-------- START CRASH LOG --------\n\n"
                     f"┌ <b>ID:</b> <code>{error_id}</code>\n"
                     f"├ <b>Chat:</b> <code>{chat_value}</code>\n"
