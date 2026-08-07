@@ -56,6 +56,26 @@ def language(func: Callable) -> Callable:
 
     return decorator
 
+def only_admins(func: Callable) -> Callable:
+    async def decorator(client: Client, message: Message, *args):
+        if message.from_user and (
+            message.from_user.id
+            in [
+                admin.user.id
+                async for admin in message.chat.get_members(
+                    filter=enums.ChatMembersFilter.ADMINISTRATORS
+                )
+            ]
+        ):
+            return await func(client, message, *args)
+
+        elif message.from_user and message.from_user.id in config.SUDOERS:
+            return await func(client, message, *args)
+
+        elif message.sender_chat and message.sender_chat.id == message.chat.id:
+            return await func(client, message, *args)
+
+    return decorator
 
 def handle_error(func: Callable) -> Callable:
     async def decorator(
