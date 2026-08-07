@@ -19,6 +19,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>
 import os
 import json
 import shutil
+import threading
+from http.server import BaseHTTPRequestHandler, HTTPServer
 from config import config
 from core.song import Song
 from pyrogram.types import Message
@@ -34,6 +36,23 @@ from core import (
     pytgcalls, set_group, set_title, all_groups, clear_queue, check_yt_url,
     extract_args, start_stream, shuffle_queue, delete_messages,
     get_spotify_playlist, get_youtube_playlist)
+class HealthHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.end_headers()
+        self.wfile.write(b"Bot is alive!")
+
+    def log_message(self, format, *args):
+        pass
+
+
+def start_web_server():
+    port = int(os.environ.get("PORT", 10000))
+    server = HTTPServer(("0.0.0.0", port), HealthHandler)
+    server.serve_forever()
+
+
+threading.Thread(target=start_web_server, daemon=True).start()
 
 
 REPO = """
