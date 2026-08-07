@@ -130,28 +130,30 @@ def handle_error(func: Callable) -> Callable:
                 except Exception:
                     error_msg = None
 
-            if config.SUDOERS and config.SUDOERS[0] != 0:
-    chat_value = str(chat.id) if chat else str(chat_id)
-    group_title = (
-        chat.title
-        if chat and getattr(chat, "title", None)
-        else "Unknown"
-    )
-    group_link = error_msg.link if error_msg else ""
+           if config.SUDOERS and config.SUDOERS[0] != 0:
+                chat_value = str(chat.id) if chat else str(chat_id)
+                group_title = (
+                    chat.title
+                    if chat and getattr(chat, "title", None)
+                    else "Unknown"
+                )
+                group_link = error_msg.link if error_msg else ""
 
-    try:
-        await pyro_client.send_message(
-            config.SUDOERS[0],
-            f"-------- START CRASH LOG --------\n\n"
-            f"┌ <b>ID:</b> <code>{error_id}</code>\n"
-            f"├ <b>Chat:</b> <code>{chat_value}</code>\n"
-            f"├ <b>Date:</b> <code>{date}</code>\n"
-            f"├ <b>Group:</b> "
-            f"<a href='{group_link}'>{group_title}</a>\n"
-            f"└ <b>Traceback:</b>\n<code>{traceback}</code>\n\n"
-            f"-------- END CRASH LOG --------",
-            parse_mode=enums.ParseMode.HTML,
-            disable_web_page_preview=True,
-        )
+                try:
+                    await pyro_client.send_message(
+                        config.SUDOERS[0],
+                        f"-------- START CRASH LOG --------\n\n"
+                        f"┌ <b>ID:</b> <code>{error_id}</code>\n"
+                        f"├ <b>Chat:</b> <code>{chat_value}</code>\n"
+                        f"├ <b>Date:</b> <code>{date}</code>\n"
+                        f"├ <b>Group:</b> "
+                        f"<a href='{group_link}'>{group_title}</a>\n"
+                        f"└ <b>Traceback:</b>\n<code>{traceback}</code>\n\n"
+                        f"-------- END CRASH LOG --------",
+                        parse_mode=enums.ParseMode.HTML,
+                        disable_web_page_preview=True,
+                    )
+                except Exception:
+                    pass
     except Exception:
         pass
